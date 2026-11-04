@@ -1,0 +1,5 @@
+# The Vercel CLI does not read .gitignore, so secrets must be excluded here too.
+.env
+.env.*
+!.env.example
+docs
