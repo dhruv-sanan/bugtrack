@@ -11,10 +11,11 @@ Scored on code quality, working features, UI/UX, REST API design, and bonus extr
 |---|---|
 | Design decisions | Done (below) |
 | Backend code | Written and verified locally, moved to the repo root |
-| Frontend code | Not started. Pages and behaviour are specified below |
+| Frontend code | Done, and tested in a real browser. See "Verified" |
 | Implementation plan | Done, in `plans/2026-11-04-bugtrack.md` |
 | Fable review | Done, fixes applied |
-| Vercel and Neon | Never deployed. See "Not verified" |
+| Vercel and Neon | Deployed to https://bugtrack-dun.vercel.app. See "Verified" |
+| Real email delivery | Not tested, because no SMTP credentials were supplied. See "Not verified" |
 
 ## Decisions
 
@@ -62,7 +63,7 @@ Implemented in `server/`, layered as routes, controllers, services.
 
 Responses are `{ data }`. Paginated lists add `meta: { page, limit, total }`; the members list is not paginated. Errors are `{ error: { code, message, details? } }`. Status codes used: 200, 201, 204, 400, 401, 403, 404, 409, 413, 500.
 
-## Frontend (to build)
+## Frontend
 
 | Route | Purpose |
 |---|---|
@@ -98,13 +99,16 @@ Responses are `{ data }`. Paginated lists add `meta: { page, limit, total }`; th
 7. **Seed wipes data:** `npm run db:seed` deletes all users, projects and tickets. Demo password is `demo1234`.
 8. **Harmless log:** `pg` prints a `client.query()` deprecation warning during Prisma `$transaction` calls. All checks still pass.
 
+## Verified
+
+- **API on Vercel and Neon:** the smoke test passes against the deployed app, which covers the Express mount in a Vercel function and `adapter-pg` over the pooled URL with SSL.
+- **Browser, using Playwright with installed Chrome:** login for all roles, logout, route guard, `next` param, signup, drag by mouse, touch and keyboard, status dropdown, ticket, project, member and user management, profile and user editing, demo locks, filters in the URL, and developer gating.
+- **Layout:** cards stay on one line at 1440, 1366 and 1280 px. At 360 px: no sideways overflow, plus the menu sheet, navigation, logout, status dropdown and dialogs.
+
 ## Not verified
 
-- Anything on Vercel, including this Express mount in a deployed function.
-- Neon, including `adapter-pg` over the pooled URL with SSL.
-- Real email delivery. The SMTP path has never run; only the email builder is tested.
-
-Deploy early and run `npm run smoke -- https://<app>.vercel.app` to cover the first two.
+- Real email delivery. The SMTP path has never run, because no credentials were supplied. Only the email builder is tested. The README explains how to try it.
+- Browsers other than Chrome, and touch on a physical device. Touch drag was tested through emulated touch events.
 
 ## Security notes
 
