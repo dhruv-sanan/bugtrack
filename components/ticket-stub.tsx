@@ -51,7 +51,7 @@ export function TicketStub({ ticket, handle, status, showProject, className }: T
           <div className={stubClass}>{stubContent}</div>
         )}
 
-        <div className="relative flex min-w-0 flex-col gap-2 border-l-2 border-dashed border-border p-3">
+        <div className="@container relative flex min-w-0 flex-col gap-2 border-l-2 border-dashed border-border p-3">
           {showProject && <p className="truncate text-xs text-muted-foreground">{ticket.project.name}</p>}
           <Link
             href={`/tickets/${ticket.id}`}
@@ -59,7 +59,8 @@ export function TicketStub({ ticket, handle, status, showProject, className }: T
           >
             {ticket.title}
           </Link>
-          <div className="relative z-10 mt-auto flex flex-wrap items-center gap-x-2 gap-y-1">
+          {/* One line, so cards in a row match in height. Narrow cards drop the status icons to fit. */}
+          <div className="relative z-10 mt-auto flex items-center gap-x-1 whitespace-nowrap @max-[198px]:[&_svg]:hidden">
             <PriorityBadge priority={ticket.priority} />
             {status}
             <Avatar person={ticket.assignee} className="ml-auto" />

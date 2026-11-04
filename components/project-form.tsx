@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Field } from "@/components/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { apiFieldErrors, errorMessage, zodFieldErrors, type FieldErrors } from "@/lib/errors";
+import { apiFieldErrors, errorMessage, errorStatus, zodFieldErrors, type FieldErrors } from "@/lib/errors";
 import type { Project } from "@/lib/types";
 import { createProjectSchema, type CreateProjectInput } from "@/shared/schemas";
 
@@ -28,6 +28,8 @@ export function ProjectForm({ project, onSubmit, actions }: ProjectFormProps) {
     try {
       await onSubmit(parsed.data);
     } catch (err) {
+      // The key is a project's only unique field.
+      if (errorStatus(err) === 409) return setErrors({ key: ["That key is already in use"] });
       setErrors(apiFieldErrors(err));
       toast.error(errorMessage(err));
     }

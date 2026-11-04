@@ -20,7 +20,7 @@ const PRIORITY_TEXT: Record<TicketPriority, string> = {
 
 export function PriorityBadge({ priority }: { priority: TicketPriority }) {
   return (
-    <span className={cn("inline-flex items-center gap-1.5 text-xs font-medium", PRIORITY_TEXT[priority])}>
+    <span className={cn("inline-flex shrink-0 items-center gap-1.5 text-xs font-medium", PRIORITY_TEXT[priority])}>
       <span aria-hidden className={cn("size-2 rounded-[2px]", PRIORITY_DOT[priority])} />
       {PRIORITY_LABELS[priority]}
     </span>
@@ -65,9 +65,9 @@ export function StatusGlyph({ status, className }: { status: TicketStatus; class
 
 export function StatusBadge({ status }: { status: TicketStatus }) {
   return (
-    <span className="inline-flex items-center gap-1.5 text-xs font-medium">
+    <span className="inline-flex min-w-0 items-center gap-1 text-xs font-medium">
       <StatusGlyph status={status} />
-      {STATUS_LABELS[status]}
+      <span className="truncate">{STATUS_LABELS[status]}</span>
     </span>
   );
 }

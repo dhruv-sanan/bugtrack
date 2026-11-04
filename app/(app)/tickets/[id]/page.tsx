@@ -66,7 +66,7 @@ export default function TicketDetailPage() {
       <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="drop-shadow-[0_1px_2px_rgb(20_27_45/0.14)]">
           <article className="ticket-stub grid min-h-72 grid-cols-[var(--stub-width)_minmax(0,1fr)] bg-card">
-            <div className={`flex justify-center py-4 ${STUB_COLORS[ticket.priority]}`}>
+            <div className={`flex items-start justify-center py-4 ${STUB_COLORS[ticket.priority]}`}>
               <span className="ticket-key font-mono text-xs font-semibold tracking-wider">{key}</span>
             </div>
             <div className="min-w-0 border-l-2 border-dashed border-border p-5 sm:p-6">
@@ -81,7 +81,8 @@ export default function TicketDetailPage() {
         <aside className="rounded-xl border bg-card p-4">
           <dl className="divide-y">
             <Detail label="Status">
-              <StatusSelect ticket={ticket} />
+              {/* The negative margin cancels the trigger's padding and border, to line up with the other values. */}
+              <StatusSelect ticket={ticket} className="-ml-[5px]" />
             </Detail>
             <Detail label="Priority">
               <PriorityBadge priority={ticket.priority} />

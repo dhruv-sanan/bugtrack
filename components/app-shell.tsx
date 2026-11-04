@@ -78,7 +78,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
               onClick={onNavigate}
               className={linkClass(pathname.startsWith(`/projects/${project.id}`))}
             >
-              <span className="w-10 shrink-0 truncate font-mono text-[11px] opacity-70">{project.key}</span>
+              <span className="min-w-10 shrink-0 font-mono text-[11px] opacity-70">{project.key}</span>
               <span className="truncate">{project.name}</span>
             </Link>
           ))}
