@@ -2,10 +2,23 @@ import { describe, expect, it } from "vitest";
 import {
   createProjectSchema,
   createTicketSchema,
+  idParam,
   registerSchema,
   ticketListQuery,
   updateTicketSchema,
 } from "@/shared/schemas";
+
+describe("idParam", () => {
+  it("coerces numeric strings", () => {
+    expect(idParam.parse("12")).toBe(12);
+  });
+
+  it("rejects values Postgres cannot store as an integer", () => {
+    expect(idParam.safeParse("99999999999").success).toBe(false);
+    expect(idParam.safeParse("abc").success).toBe(false);
+    expect(idParam.safeParse("0").success).toBe(false);
+  });
+});
 
 describe("registerSchema", () => {
   it("normalises email before validating it", () => {

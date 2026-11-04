@@ -18,7 +18,7 @@ const escapeHtml = (value: string) =>
     .replace(/"/g, "&quot;");
 
 export function buildAssignmentEmail(email: AssignmentEmail, appUrl: string) {
-  const url = `${appUrl}/tickets/${email.ticketId}`;
+  const url = `${appUrl.replace(/\/+$/, "")}/tickets/${email.ticketId}`;
   const summary = `${email.assignedByName} assigned ${email.ticketKey} to you in ${email.projectName}.`;
   return {
     subject: `[${email.ticketKey}] Assigned to you: ${email.ticketTitle}`,
@@ -53,7 +53,8 @@ export async function sendAssignmentEmail(email: AssignmentEmail): Promise<void>
       socketTimeout: 5_000,
     });
     await transport.sendMail({
-      from: MAIL_FROM ?? SMTP_USER,
+      // `||`, not `??`: .env.example ships MAIL_FROM as an empty string.
+      from: MAIL_FROM || SMTP_USER,
       to: email.to,
       ...buildAssignmentEmail(email, APP_URL),
     });

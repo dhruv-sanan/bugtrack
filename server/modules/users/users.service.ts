@@ -1,7 +1,8 @@
 import { prisma } from "../../db";
 import { publicUserSelect, type PublicUser } from "../../lib/selects";
-import { badRequest, notFound } from "../../http/errors";
+import { badRequest, forbidden, notFound } from "../../http/errors";
 import { hashPassword } from "../auth/auth.service";
+import { isDemoAccount } from "@/shared/constants";
 import type { CreateUserInput, UpdateUserInput, UserListQuery } from "@/shared/schemas";
 import type { Prisma } from "../../generated/prisma/client";
 
@@ -40,11 +41,20 @@ export async function create({ password, ...input }: CreateUserInput) {
   });
 }
 
+async function assertNotDemoAccount(id: number): Promise<void> {
+  const user = await prisma.user.findUnique({ where: { id }, select: { email: true } });
+  if (user && isDemoAccount(user.email)) {
+    throw forbidden("Demo accounts cannot be changed or deleted");
+  }
+}
+
 export async function update(actor: PublicUser, id: number, input: UpdateUserInput) {
   // Keeps at least one Admin in the system: the last one cannot demote themselves.
   if (id === actor.id && input.role && input.role !== actor.role) {
     throw badRequest("You cannot change your own role");
   }
+  if (input.password || input.email || input.role) await assertNotDemoAccount(id);
+
   const { password, ...fields } = input;
   return prisma.user.update({
     where: { id },
@@ -55,5 +65,6 @@ export async function update(actor: PublicUser, id: number, input: UpdateUserInp
 
 export async function remove(actor: PublicUser, id: number) {
   if (id === actor.id) throw badRequest("You cannot delete your own account");
+  await assertNotDemoAccount(id);
   await prisma.user.delete({ where: { id } });
 }

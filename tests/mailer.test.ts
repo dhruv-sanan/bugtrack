@@ -17,6 +17,11 @@ describe("buildAssignmentEmail", () => {
     expect(text).toContain("https://app.test/tickets/12");
   });
 
+  it("does not double the slash when APP_URL ends with one", () => {
+    const { text } = buildAssignmentEmail(email, "https://app.test/");
+    expect(text).toContain("https://app.test/tickets/12");
+  });
+
   it("escapes user-supplied text in the HTML body", () => {
     const { html } = buildAssignmentEmail(
       { ...email, ticketTitle: '<img src=x onerror="alert(1)">' },

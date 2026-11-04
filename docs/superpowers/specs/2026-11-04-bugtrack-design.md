@@ -10,10 +10,10 @@ Scored on code quality, working features, UI/UX, REST API design, and bonus extr
 | Item | State |
 |---|---|
 | Design decisions | Done (below) |
-| Backend code | Written and verified locally, in `docs/superpowers/reference-backend/` |
+| Backend code | Written and verified locally, moved to the repo root |
 | Frontend code | Not started. Pages and behaviour are specified below |
-| Implementation plan | Not written |
-| Fable review | Not done. The user asked for it at the end of planning |
+| Implementation plan | Done, in `plans/2026-11-04-bugtrack.md` |
+| Fable review | Done, fixes applied |
 | Vercel and Neon | Never deployed. See "Not verified" |
 
 ## Decisions
@@ -30,11 +30,11 @@ Scored on code quality, working features, UI/UX, REST API design, and bonus extr
 
 ## Data
 
-Source of truth: `reference-backend/prisma/schema.prisma`. Tables are `User`, `Project`, `ProjectMember`, `Ticket`. Deleting a user sets ticket reporter and assignee to null, and the UI shows "Deleted user". Deleting a project cascades to its members and tickets.
+Source of truth: `prisma/schema.prisma`. Tables are `User`, `Project`, `ProjectMember`, `Ticket`. Deleting a user sets ticket reporter and assignee to null, and the UI shows "Deleted user". Deleting a project cascades to its members and tickets.
 
 ## Permissions
 
-Source of truth: `reference-backend/shared/permissions.ts`, used by the API to enforce and by the UI to hide actions.
+Source of truth: `shared/permissions.ts`, used by the API to enforce and by the UI to hide actions.
 
 | Action | Admin | Manager | Developer |
 |---|---|---|---|
@@ -50,7 +50,7 @@ Any ticket or project a non-admin can see is in a project they belong to, so the
 
 ## API
 
-Implemented in `reference-backend/server/`, layered as routes, controllers, services.
+Implemented in `server/`, layered as routes, controllers, services.
 
 - `POST /api/auth/register`, `/login`, `/logout`, `GET /api/auth/me` (only `me` needs auth, so an expired session can still log out)
 - `GET`, `POST /api/users`, `GET`, `PATCH`, `DELETE /api/users/:id`
@@ -109,5 +109,6 @@ Deploy early and run `npm run smoke -- https://<app>.vercel.app` to cover the fi
 ## Security notes
 
 - Demo accounts have a public password, so the demo Admin is open to anyone with the URL. Keep no real data in the app.
-- Anyone using the demo Admin can make the app email any registered address. Use a throwaway Gmail account, and revoke its App Password after evaluation.
+- Signup does not verify addresses, so anyone can register any address and have the demo Admin or Manager email it, with attacker-written text in the subject and no rate limit. Use a throwaway Gmail account, and revoke its App Password after evaluation.
+- Demo accounts cannot have their password, email or role changed, and cannot be deleted, so the one-click logins keep working (`shared/constants.ts`, `users.service.ts`).
 - Never commit `.env`. `.env.example` holds placeholders only.

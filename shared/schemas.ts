@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { ROLES, TICKET_PRIORITIES, TICKET_SORTS, TICKET_STATUSES } from "./constants";
+import { MAX_ID, ROLES, TICKET_PRIORITIES, TICKET_SORTS, TICKET_STATUSES } from "./constants";
 
-const positiveId = z.number().int().positive();
+const positiveId = z.number().int().positive().max(MAX_ID);
 const name = z.string().trim().min(2, "Name must be at least 2 characters").max(100);
 const email = z.string().trim().toLowerCase().pipe(z.email("Enter a valid email"));
 // bcrypt ignores everything past 72 bytes, so longer passwords are rejected.
@@ -10,7 +10,7 @@ const password = z.string().min(8, "Password must be at least 8 characters").max
 const hasFields = (value: object) => Object.keys(value).length > 0;
 const NO_FIELDS = "Provide at least one field to update";
 
-export const idParam = z.coerce.number().int().positive();
+export const idParam = z.coerce.number().pipe(positiveId);
 
 export const registerSchema = z.object({ name, email, password });
 
@@ -79,11 +79,11 @@ export const userListQuery = paginationQuery.extend({
 });
 
 export const ticketListQuery = paginationQuery.extend({
-  projectId: z.coerce.number().int().positive().optional(),
+  projectId: idParam.optional(),
   status: z.enum(TICKET_STATUSES).optional(),
   priority: z.enum(TICKET_PRIORITIES).optional(),
   assigneeId: z
-    .union([z.literal("me"), z.literal("none"), z.coerce.number().int().positive()])
+    .union([z.literal("me"), z.literal("none"), idParam])
     .optional(),
   q: z.string().trim().max(100).optional(),
   sort: z.enum(TICKET_SORTS).default("updated"),

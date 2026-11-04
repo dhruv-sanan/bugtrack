@@ -132,6 +132,14 @@ async function main() {
   check("Admin cannot demote themselves", res.status === 400, res);
   res = await admin.request("DELETE", `/users/${adminId}`);
   check("Admin cannot delete themselves", res.status === 400, res);
+  res = await admin.request("PATCH", `/users/${managerId}`, { role: "DEVELOPER" });
+  check("Admin cannot change a demo account's role", res.status === 403, res);
+  res = await admin.request("DELETE", `/users/${managerId}`);
+  check("Admin cannot delete a demo account", res.status === 403, res);
+  res = await manager.request("PATCH", `/users/${managerId}`, { password: "changed-pass-1" });
+  check("demo user cannot change their password", res.status === 403, res);
+  res = await manager.request("GET", "/tickets/99999999999");
+  check("out-of-range id returns 400, not 500", res.status === 400, res);
 
   console.log("\nProjects");
   const key = `S${suffix}`.slice(0, 10);

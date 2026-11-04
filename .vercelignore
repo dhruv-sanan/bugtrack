@@ -3,3 +3,5 @@
 .env.*
 !.env.example
 docs
+# Vercel must generate the client itself, so a stale local copy cannot mask a build problem.
+server/generated

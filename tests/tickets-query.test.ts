@@ -37,4 +37,16 @@ describe("buildTicketWhere", () => {
       { description: { contains: "login", mode: "insensitive" } },
     ]);
   });
+
+  it("also matches a ticket key or bare ticket number", () => {
+    expect(buildTicketWhere(admin, query({ q: "bug-12" })).OR).toContainEqual({
+      id: 12,
+      project: { key: "BUG" },
+    });
+    expect(buildTicketWhere(admin, query({ q: "12" })).OR).toContainEqual({ id: 12 });
+  });
+
+  it("does not match a number too large to be a ticket id", () => {
+    expect(buildTicketWhere(admin, query({ q: "99999999999" })).OR).toHaveLength(2);
+  });
 });
