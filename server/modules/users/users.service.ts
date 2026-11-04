@@ -53,7 +53,7 @@ export async function update(actor: PublicUser, id: number, input: UpdateUserInp
   if (id === actor.id && input.role && input.role !== actor.role) {
     throw badRequest("You cannot change your own role");
   }
-  if (input.password || input.email || input.role) await assertNotDemoAccount(id);
+  await assertNotDemoAccount(id);
 
   const { password, ...fields } = input;
   return prisma.user.update({

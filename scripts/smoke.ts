@@ -138,6 +138,16 @@ async function main() {
   check("Admin cannot delete a demo account", res.status === 403, res);
   res = await manager.request("PATCH", `/users/${managerId}`, { password: "changed-pass-1" });
   check("demo user cannot change their password", res.status === 403, res);
+  res = await manager.request("PATCH", `/users/${managerId}`, { name: "Renamed Demo" });
+  check("demo user cannot rename themselves", res.status === 403, res);
+  res = await admin.request("PATCH", `/users/${managerId}`, { name: "Renamed Demo" });
+  check("Admin cannot rename a demo account", res.status === 403, res);
+  res = await admin.request("PATCH", `/users/${freshId}`, { email: "admin@example.com" });
+  check("email already in use returns 409", res.status === 409, res);
+  res = await fresh.request("PATCH", `/users/${freshId}`, { email: "other@example.com" });
+  check("non-admin cannot change their email", res.status === 400, res);
+  res = await fresh.request("PATCH", `/users/${freshId}`, { password: "changed-pass-1" });
+  check("user can change their own password", res.status === 200, res);
   res = await manager.request("GET", "/tickets/99999999999");
   check("out-of-range id returns 400, not 500", res.status === 400, res);
 

@@ -110,5 +110,5 @@ Deploy early and run `npm run smoke -- https://<app>.vercel.app` to cover the fi
 
 - Demo accounts have a public password, so the demo Admin is open to anyone with the URL. Keep no real data in the app.
 - Signup does not verify addresses, so anyone can register any address and have the demo Admin or Manager email it, with attacker-written text in the subject and no rate limit. Use a throwaway Gmail account, and revoke its App Password after evaluation.
-- Demo accounts cannot have their password, email or role changed, and cannot be deleted, so the one-click logins keep working (`shared/constants.ts`, `users.service.ts`).
+- Demo accounts cannot have their name, password, email or role changed, and cannot be deleted, so the one-click logins keep working and reviewers see the names the demo buttons promise (`shared/constants.ts`, `users.service.ts`). The name lock is enforced in the API, not just the UI, because the password is public.
 - Never commit `.env`. `.env.example` holds placeholders only.

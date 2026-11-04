@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
 import { toast } from "sonner";
+import { EditUserDialog } from "@/components/edit-user-dialog";
 import { Avatar } from "@/components/person";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -86,11 +87,24 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       )}
 
       <div className="mt-auto flex items-center gap-2.5 border-t border-sidebar-border pt-4">
-        <Avatar person={user} className="size-8 bg-sidebar-accent text-sidebar-accent-foreground" />
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-medium">{user.name}</p>
-          <p className="text-xs opacity-70">{ROLE_LABELS[user.role]}</p>
-        </div>
+        {/* /users is Admin-only, so this is how everyone else reaches their own details. */}
+        <EditUserDialog
+          user={user}
+          trigger={
+            <button
+              type="button"
+              aria-label={`Edit profile of ${user.name}`}
+              title="Edit profile"
+              className="-m-1 flex min-w-0 flex-1 items-center gap-2.5 rounded-md p-1 text-left transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:outline-none"
+            >
+              <Avatar person={user} className="size-8 bg-sidebar-accent text-sidebar-accent-foreground" />
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-medium">{user.name}</span>
+                <span className="block text-xs opacity-70">{ROLE_LABELS[user.role]}</span>
+              </span>
+            </button>
+          }
+        />
         <Button
           variant="ghost"
           size="icon"

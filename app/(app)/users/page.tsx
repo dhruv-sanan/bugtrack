@@ -1,9 +1,10 @@
 "use client";
 
-import { Plus, ShieldAlert, Trash2, UsersRound } from "lucide-react";
+import { Pencil, Plus, ShieldAlert, Trash2, UsersRound } from "lucide-react";
 import { useDeferredValue, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { EditUserDialog } from "@/components/edit-user-dialog";
 import { Field } from "@/components/field";
 import { PageHeader } from "@/components/page-header";
 import { Pagination } from "@/components/pagination";
@@ -156,6 +157,20 @@ function DeleteUserButton({ user, disabled, onConfirm }: { user: User; disabled:
   );
 }
 
+/** Unlike role and delete, an Admin may edit their own row, unless it is a demo account. */
+function EditUserButton({ user }: { user: User }) {
+  return (
+    <EditUserDialog
+      user={user}
+      trigger={
+        <Button variant="ghost" size="icon" aria-label={`Edit ${user.name}`} disabled={isDemoAccount(user.email)}>
+          <Pencil />
+        </Button>
+      }
+    />
+  );
+}
+
 function UserLabel({ user }: { user: User }) {
   const currentUser = useCurrentUser();
   return (
@@ -178,7 +193,8 @@ function UserRow({ user }: { user: User }) {
       <TableCell>
         <RoleSelect value={user.role} onChange={changeRole} disabled={isLocked} />
       </TableCell>
-      <TableCell className="w-12 text-right">
+      <TableCell className="w-20 text-right whitespace-nowrap">
+        <EditUserButton user={user} />
         <DeleteUserButton user={user} disabled={isLocked} onConfirm={remove} />
       </TableCell>
     </TableRow>
@@ -193,6 +209,7 @@ function UserCard({ user }: { user: User }) {
       <p className="mt-1 truncate text-xs text-muted-foreground">{user.email}</p>
       <div className="mt-3 flex items-center gap-2">
         <RoleSelect value={user.role} onChange={changeRole} disabled={isLocked} />
+        <EditUserButton user={user} />
         <DeleteUserButton user={user} disabled={isLocked} onConfirm={remove} />
       </div>
     </div>
@@ -238,7 +255,7 @@ function UsersContent() {
                   <TableHead className="pl-4">Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead className="w-36">Role</TableHead>
-                  <TableHead className="w-12">
+                  <TableHead className="w-20">
                     <span className="sr-only">Actions</span>
                   </TableHead>
                 </TableRow>
