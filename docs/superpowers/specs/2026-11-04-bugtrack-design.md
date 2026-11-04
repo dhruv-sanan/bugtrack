@@ -86,7 +86,7 @@ Responses are `{ data }`. Paginated lists add `meta: { page, limit, total }`; th
 
 - `npm test`: Vitest on permissions, schemas, the ticket query builder and the email builder.
 - `npm run smoke -- <url>`: end-to-end API check against a running app, local or deployed. Needs seeded data.
-- Verified locally: 29 unit tests pass, `tsc` clean, ESLint clean on backend code, 74 of 74 smoke checks pass against a production build on real Postgres.
+- Last run: 36 unit tests pass, `tsc` and ESLint clean, and 84 of 84 smoke checks pass against the deployed app on Neon.
 
 ## Traps found by running it
 
