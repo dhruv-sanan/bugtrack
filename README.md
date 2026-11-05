@@ -114,16 +114,15 @@ The smoke test creates its own data and removes it afterwards.
 
 ## Try the assignment email
 
-**Email delivery has not been tested yet.** The live app has no SMTP credentials, so it skips sending and logs a warning. Only the code that builds the email has tests.
+The live app sends real email through Gmail SMTP. To see it:
 
-To try it:
+1. Sign up with a real address, then log out. Addresses at `@example.com` never get email.
+2. Log in as Asha Admin, and add the new user to a project under its Settings.
+3. Assign a ticket in that project to the new user. The email should arrive within a few seconds, so check spam if it doesn't show up.
 
-1. Set `SMTP_USER`, `SMTP_PASS` and `MAIL_FROM` in `.env`, or in Vercel followed by a redeploy. For Gmail, turn on 2-Step Verification and create an App Password for `SMTP_PASS`.
-2. Sign up with a real address. Addresses at `@example.com` never get email.
-3. Log in as Asha Admin, and add the new user to a project under its Settings.
-4. Assign a ticket in that project to the new user. The email should arrive within a few seconds.
+Assigning a ticket to yourself doesn't send an email.
 
-A failed send is logged and does not fail the ticket update.
+To send email when running locally, set `SMTP_HOST`, `SMTP_USER` and `SMTP_PASS` in `.env`. For Gmail, turn on 2-Step Verification and create an App Password for `SMTP_PASS`. A failed send is logged and does not fail the ticket update.
 
 ## Known limits
 

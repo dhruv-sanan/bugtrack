@@ -15,7 +15,7 @@ Scored on code quality, working features, UI/UX, REST API design, and bonus extr
 | Implementation plan | Done, in `plans/2026-11-04-bugtrack.md` |
 | Fable review | Done, fixes applied |
 | Vercel and Neon | Deployed to https://bugtrack-dun.vercel.app from https://github.com/dhruv-sanan/bugtrack, where each push to `main` goes to production. See "Verified" |
-| Real email delivery | Not tested, because no SMTP credentials were supplied. See "Not verified" |
+| Real email delivery | Working on the deployed app through Gmail SMTP. See "Verified" |
 
 ## Decisions
 
@@ -86,7 +86,7 @@ Responses are `{ data }`. Paginated lists add `meta: { page, limit, total }`; th
 
 - `npm test`: Vitest on permissions, schemas, the ticket query builder and the email builder.
 - `npm run smoke -- <url>`: end-to-end API check against a running app, local or deployed. Needs seeded data.
-- Last run: 36 unit tests pass, `tsc` and ESLint clean, and 84 of 84 smoke checks pass against the deployed app on Neon.
+- Last run: 36 unit tests pass, `tsc` and ESLint clean. Against the deployed app on Neon, 84 of 84 smoke checks and 111 of 111 browser checks pass.
 
 ## Traps found by running it
 
@@ -103,11 +103,13 @@ Responses are `{ data }`. Paginated lists add `meta: { page, limit, total }`; th
 
 - **API on Vercel and Neon:** the smoke test passes against the deployed app, which covers the Express mount in a Vercel function and `adapter-pg` over the pooled URL with SSL.
 - **Browser, using Playwright with installed Chrome:** login for all roles, logout, route guard, `next` param, signup, drag by mouse, touch and keyboard, status dropdown, ticket, project, member and user management, profile and user editing, demo locks, filters in the URL, and developer gating.
+- **Email:** assigning on create and reassigning each delivered a real email to a Gmail inbox from the deployed app. An edit that doesn't change the assignee took 0.25 s against about 3 s for a send, so it didn't appear to send one.
 - **Layout:** cards stay on one line at 1440, 1366 and 1280 px. At 360 px: no sideways overflow, plus the menu sheet, navigation, logout, status dropdown and dialogs.
 
 ## Not verified
 
-- Real email delivery. The SMTP path has never run, because no credentials were supplied. Only the email builder is tested. The README explains how to try it.
+- Email to an address other than the sending account. Both test emails went to the Gmail account that sent them.
+- The `Open ticket` link in a delivered email has not been clicked in testing.
 - Browsers other than Chrome, and touch on a physical device. Touch drag was tested through emulated touch events.
 
 ## Security notes
