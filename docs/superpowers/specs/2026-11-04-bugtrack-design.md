@@ -14,7 +14,7 @@ Scored on code quality, working features, UI/UX, REST API design, and bonus extr
 | Frontend code | Done, and tested in a real browser. See "Verified" |
 | Implementation plan | Done, in `plans/2026-11-04-bugtrack.md` |
 | Fable review | Done, fixes applied |
-| Vercel and Neon | Deployed to https://bugtrack-dun.vercel.app. See "Verified" |
+| Vercel and Neon | Deployed to https://bugtrack-dun.vercel.app from https://github.com/dhruv-sanan/bugtrack, where each push to `main` goes to production. See "Verified" |
 | Real email delivery | Not tested, because no SMTP credentials were supplied. See "Not verified" |
 
 ## Decisions

@@ -4,6 +4,8 @@ A mini Jira: projects, tickets, a Kanban board, role-based access and assignment
 
 **Live app: https://bugtrack-dun.vercel.app**
 
+**Source: https://github.com/dhruv-sanan/bugtrack**
+
 ## Demo accounts
 
 The login page has a one-click button for each account. The password for all of them is `demo1234`.
@@ -45,7 +47,7 @@ The rules live in `shared/permissions.ts`. The API enforces them, and the UI use
 
 ## Architecture
 
-One Next.js app on Vercel serves both the UI and the API, so there is one origin, one deploy and no CORS.
+One Next.js app on Vercel serves both the UI and the API, so there is one origin, one deploy and no CORS. Vercel deploys from this repo: each push to `main` goes to production.
 
 - **Frontend:** Next.js App Router, TypeScript, Redux Toolkit with RTK Query, Tailwind, shadcn/ui and dnd-kit.
 - **API:** Express in `server/`, layered as routes, controllers and services, and mounted by `pages/api/[...path].ts`.
