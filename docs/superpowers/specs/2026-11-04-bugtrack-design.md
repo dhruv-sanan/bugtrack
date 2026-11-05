@@ -103,12 +103,11 @@ Responses are `{ data }`. Paginated lists add `meta: { page, limit, total }`; th
 
 - **API on Vercel and Neon:** the smoke test passes against the deployed app, which covers the Express mount in a Vercel function and `adapter-pg` over the pooled URL with SSL.
 - **Browser, using Playwright with installed Chrome:** login for all roles, logout, route guard, `next` param, signup, drag by mouse, touch and keyboard, status dropdown, ticket, project, member and user management, profile and user editing, demo locks, filters in the URL, and developer gating.
-- **Email:** assigning on create and reassigning each delivered a real email to a Gmail inbox from the deployed app, and the `Open ticket` link goes to the ticket's URL on the live site. An edit that doesn't change the assignee took 0.25 s against about 3 s for a send, so it didn't appear to send one.
+- **Email:** assigning on create and reassigning each delivered a real email to a Gmail inbox from the deployed app, and the `Open ticket` link goes to the ticket's URL on the live site. A third email reached a different Gmail address, but landed in spam, because it comes from a new personal Gmail account. An edit that doesn't change the assignee took 0.25 s against about 3 s for a send, so it didn't appear to send one.
 - **Layout:** cards stay on one line at 1440, 1366 and 1280 px. At 360 px: no sideways overflow, plus the menu sheet, navigation, logout, status dropdown and dialogs.
 
 ## Not verified
 
-- Email to an address other than the sending account. Both test emails went to the Gmail account that sent them.
 - Browsers other than Chrome, and touch on a physical device. Touch drag was tested through emulated touch events.
 
 ## Security notes

@@ -118,7 +118,7 @@ The live app sends real email through Gmail SMTP. To see it:
 
 1. Sign up with a real address, then log out. Addresses at `@example.com` never get email.
 2. Log in as Asha Admin, and add the new user to a project under its Settings.
-3. Assign a ticket in that project to the new user. The email should arrive within a few seconds, so check spam if it doesn't show up.
+3. Assign a ticket in that project to the new user. The email should arrive within a few seconds. Check spam too, because a test delivery to another Gmail address landed there.
 
 Assigning a ticket to yourself doesn't send an email.
 
